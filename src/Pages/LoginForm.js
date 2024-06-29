@@ -9,10 +9,11 @@ import { InputField } from "../Components/InputField.js"
 import { InputTooltip } from "../Components/InputTooltip.js";
 import { Link } from "react-router-dom"
 import PathConstants from "../Routes/PathConstants";
-
-const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-
+import { login } from '../API/User.js'
+//const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+const USER_REGEX = /^[a-zA-Z0-9-_]{3,23}$/;
+// const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[0-9]).{8,24}$/;
 
 export default function LoginForm(){
   const userRef = useRef();
@@ -57,7 +58,8 @@ export default function LoginForm(){
     if (!userV || !pwdV){
       setErrMsg("Invalid Entry")
     }
-    console.log(user,pwd)
+
+    console.log(login(user,pwd))
     setSuccess(true);
   }
 

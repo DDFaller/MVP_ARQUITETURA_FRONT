@@ -79,7 +79,7 @@ export default function SignUpForm(){
     <div className="wrapper">
     <form onSubmit= {handleSubmit}action ="">
       <h1> Welcome to,</h1>
-      <h3> Please Login</h3>
+      <h3> Please Register</h3>
       <InputField
               inputType = "text" 
               inputPlaceholder=" Username"

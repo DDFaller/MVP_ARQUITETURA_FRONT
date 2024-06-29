@@ -20,7 +20,7 @@ export const InputField = forwardRef(({inputType,inputPlaceholder,onChange,valid
         ></input>
       {icon}
     </div>
-    <InputTooltip id= {describedAria} showTooltip={() => {return showTooltip()}}>{children}</InputTooltip>
+    { showTooltip ? <InputTooltip id= {describedAria} showTooltip={() => {return showTooltip()}}>{children}</InputTooltip> : <></> }
     </div>
   );
 });
