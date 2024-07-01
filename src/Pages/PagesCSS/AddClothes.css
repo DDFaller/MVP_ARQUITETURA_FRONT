@@ -1,0 +1,22 @@
+.RedirectClothesButton {
+  margin-bottom: 0;
+  margin-right: auto;
+  margin-left: -50px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+  color: rgb(205, 3, 255);
+  border: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 24px;
+}
+
+.RedirectClothesButton:hover {
+  background-color: #aa00ff; /* Background color on hover */
+  color: white; /* Text color on hover */
+}

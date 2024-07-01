@@ -18,7 +18,10 @@ function GLTFModel({position = [0,0,0], model_url}) {
     <primitive object={hamburguer.scene} scale={[scaleOption,scaleOption,scaleOption]} position={position}/>
   </group>)
 }
-export default function ClothModel({model_url = model_url}){
+
+
+
+export default function ClothModel({model_url = 'model_url'}){
   return <>
     <Canvas
       className='r3f'
@@ -42,7 +45,7 @@ export default function ClothModel({model_url = model_url}){
     <directionalLight></directionalLight>
 
     <OrbitControls/>
-    <GLTFModel model_url={model_url}/>
+    {/* <GLTFModel model_url={model_url}/> */}
 
   </Canvas>
   
