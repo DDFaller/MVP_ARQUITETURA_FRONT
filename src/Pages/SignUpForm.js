@@ -111,7 +111,6 @@ export default function SignUpForm(){
               showTooltip = {() => {if (userFocus && !validName) {return "instructions"} else{return "offscreen"}}}
               icon = {<FaUserAlt className="icon" />}
       >
-            Animate this in future
             <FontAwesomeIcon icon={faInfoCircle}/> CPF:<br/>
             &bull; Type just the numbers of your cpf.<br/>
             {/* &bull; Must begin with a letter.<br/> */}
