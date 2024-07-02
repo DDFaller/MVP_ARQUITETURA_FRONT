@@ -9,6 +9,7 @@ Este repositório contém a aplicação frontend desenvolvida em React para a ap
 - [Configuração](#configuração)
 - [Uso](#uso)
 - [Docker](#docker)
+- [API externa](#api)
 
 
 ## Instalação
@@ -62,3 +63,10 @@ docker build -t mvp_arquitetura_front .
 ```bash
 docker run -p 3000:3000 --env-file .env mvp_arquitetura_front
 ```
+
+## Api
+
+A api externa utilizada tem como intuito gerar qr codes, que redirecionam o usuário para o modelo 3d no S3.
+Componente React que a utiliza Pages/ClothModel.js
+Mais detalhes sobre ela aqui: https://goqr.me/api/
+![](qr.png)
