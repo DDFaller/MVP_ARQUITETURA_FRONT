@@ -15,25 +15,31 @@
   width: 300px; /* Adjust based on your preference */
   margin: 10px; /* Add some margin for spacing */
   position: relative; /* Ensure positioning context for absolute children */
+  display: flex;
+  flex-direction: column;
+  height: 300px;
 }
 
 .ClothCard:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance the shadow for better effect */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .ClothPreview {
-  height: 150px;
+  height: 200px;
   background: #f8f8f8;
+  position:relative;
 }
 
 .ClothData {
-  padding: 10px; /* Adjust the padding */
-  transition: max-height 0.3s ease; /* Smooth transition for max-height */
-  font-size: 0.75rem; /* Reduce the font size */
+  padding: 10px;
+  font-size: 0.75rem;
+  flex-grow: 1;
+  pointer-events: none;
+  user-select: none;
 }
 
-.ClothData .active {
-  max-height: 200px; /* Enlarge the ClothData on the y-axis */
+.ClothData.active {
+  max-height: 200px;
 }
 
 .Tooltip {
@@ -47,7 +53,7 @@
 
 .ClothTitle h2 {
   margin: 5px 0;
-  font-size: 1rem; /* Adjust the font size */
+  font-size: 1rem;
   color: #555;
 }
 
@@ -70,6 +76,6 @@
 }
 
 .RedirectButton:hover {
-  background-color: #aa00ff; /* Background color on hover */
-  color: white; /* Text color on hover */
+  background-color: #aa00ff;
+  color: white;
 }

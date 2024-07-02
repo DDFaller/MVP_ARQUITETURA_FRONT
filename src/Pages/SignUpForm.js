@@ -2,15 +2,19 @@ import React from "react";
 import { useEffect,useState,useRef } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { FaLock } from "react-icons/fa6";
-import './PagesCSS/LoginForm.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
+import './PagesCSS/LoginForm.css'
 import './PagesCSS/LoginForm.css'
 import { InputField } from "../Components/InputField";
+import { register } from "../API/User.js";
+import PathConstants from "../Routes/PathConstants.js";
 
-
-const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+//const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+const USER_REGEX = /^[a-zA-Z0-9-_]{3,23}$/;
+// const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9]{8,24}$/;
 
 
 export default function SignUpForm(){
@@ -33,8 +37,11 @@ export default function SignUpForm(){
 
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
-
+  useEffect(() =>{
+    localStorage.setItem('user_id',-1)
+  },[])
   useEffect(() =>{
     const result = USER_REGEX.test(user);
     console.log(result);
@@ -45,20 +52,32 @@ export default function SignUpForm(){
   useEffect(()=>{
     const result = PWD_REGEX.test(pwd);
     console.log(result);
-    console.log(user);
+    console.log(pwd);
     setValidPwd(result);
   },[pwd]);
 
   useEffect(()=>{
     const result = PWD_REGEX.test(matchPwd);
-    console.log(result);
-    console.log(user);
+    console.log(result && (pwd === matchPwd));
+    console.log(matchPwd);
     setValidMatchPwd(result && (pwd === matchPwd));
   },[matchPwd]);
 
   useEffect(() => {
     setErrMsg('')
   },[user,pwd])
+
+
+  const handleRegister = (user) =>{
+    if (user && user['id']){
+      localStorage.setItem('user_id',user['id'])
+      navigate("/clothes")
+    }
+    else{
+      console.log('User failed to register')
+      console.log(user)
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,7 +87,8 @@ export default function SignUpForm(){
     if (!userV || !pwdV){
       setErrMsg("Invalid Entry")
     }
-    console.log(user,pwd)
+    console.log(user,pwd,matchPwd)
+    register(user,pwd,handleRegister)
     setSuccess(true);
   }
   
@@ -82,7 +102,7 @@ export default function SignUpForm(){
       <h3> Please Register</h3>
       <InputField
               inputType = "text" 
-              inputPlaceholder=" Username"
+              inputPlaceholder=" CPF"
               onChange={(e) => setUser(e.target.value)}
               validatedAria={()=> { if (validName){return "false"}else{return "true"}}}
               describedAria="uidnote"
@@ -92,10 +112,10 @@ export default function SignUpForm(){
               icon = {<FaUserAlt className="icon" />}
       >
             Animate this in future
-            <FontAwesomeIcon icon={faInfoCircle}/> Username tips:<br/>
-            &bull; 4 to 24 characters.<br/>
-            &bull; Must begin with a letter.<br/>
-            &bull; Letters, numbers, underscores, hyphens allowed.<br/>
+            <FontAwesomeIcon icon={faInfoCircle}/> CPF:<br/>
+            &bull; Type just the numbers of your cpf.<br/>
+            {/* &bull; Must begin with a letter.<br/> */}
+            {/* &bull; Letters, numbers, underscores, hyphens allowed.<br/> */}
       </InputField>
       <InputField
               inputType = "password" 
@@ -110,8 +130,8 @@ export default function SignUpForm(){
       >
          <FontAwesomeIcon icon={faInfoCircle}/>Password tips:<br/>
             &bull; 8 to 24 characters.<br/>
-            &bull; Must include uppercase and lowercase letters, a number and a special character.<br />
-            &bull; Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+            &bull; Must include uppercase and lowercase letters, a number.<br />
+            {/* &bull; Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span> */}
       </InputField>
 
       <InputField
@@ -129,12 +149,16 @@ export default function SignUpForm(){
         <FontAwesomeIcon icon={faInfoCircle}/>Password tips:<br/>
             &bull; Match the password.<br/>
             &bull; 8 to 24 characters.<br/>
-            &bull; Must include uppercase and lowercase letters, a number and a special character.<br />
-            &bull; Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+            &bull; Must include  a number.<br />
+            {/* &bull; Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span> */}
       
       </InputField>
-          
       <button type="submit" disabled = {!validName || !validMatchPwd ? true: false} className={!validName || !validMatchPwd ? "login-button-disabled": "login-button"}>SignUp</button>
+      
+      <div className="register-link">
+        <p>Have an account? <Link to={PathConstants.LOGIN}>Sign in</Link></p>
+      </div>
+    
     </form>
     </div>
   )

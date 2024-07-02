@@ -3,6 +3,7 @@ import { uploadCloth } from '../API/Clothes'
 import { useNavigate } from "react-router-dom";
 import { InputField } from "../Components/InputField.js"
 import './PagesCSS/AddClothes.css'
+
 export default function AddClothes(){
   const [file, setFile] = useState()
   const [modelName,setModelName] = useState('');
@@ -22,7 +23,7 @@ export default function AddClothes(){
 
   function handleSubmit(event) {
     const model_bytes = file
-    uploadCloth(1,modelName,model_bytes)
+    uploadCloth(localStorage.getItem('user_id'),modelName,model_bytes)
   }
 
 

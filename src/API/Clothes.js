@@ -6,7 +6,7 @@
    postItem(inputDoctor,inputPatient,inputHealthcare,inputClinic,inputContact,inputSchedule)
 */
 
-const url = 'http://127.0.0.1:3003/'
+const url = 'http://localhost:3003/'
 export async function uploadCloth(contextUserId,inputModelName,inputModelBytes){
   const formData = new FormData();
   formData.append('user_id',contextUserId)
@@ -21,7 +21,7 @@ export async function uploadCloth(contextUserId,inputModelName,inputModelBytes){
   })
     .then((response) => response.json())
     .then((data)=> {
-      console.log(data)
+      return data
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -30,11 +30,28 @@ export async function uploadCloth(contextUserId,inputModelName,inputModelBytes){
   return request.response;
 };
 
+export async function deleteCloth(id) {
+  const formData = new FormData();
+  formData.append('id',id)
+  const response = await fetch('http://localhost:5000/cloth', {
+    method: 'DELETE',
+    body: formData
+  });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  return response.json();
+}
+
+
+
 export async function getClothes(contextUserId,dataHandler){
   const formData = new FormData();
-  formData.append('user_id',1)
+  formData.append('user_id',contextUserId)
   const endpoint = 'clothes'
-  let finalUrl = 'http://127.0.0.1:5000/' + endpoint;
+  let finalUrl = 'http://localhost:5000/' + endpoint;
 
   var request = fetch(finalUrl, {
     method: 'post',
@@ -57,6 +74,7 @@ export async function getClothes(contextUserId,dataHandler){
       return null
     });
 };
+
 
 
 export function getCloth(contextUserId, inputModelName){

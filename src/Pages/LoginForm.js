@@ -2,14 +2,15 @@ import React from "react";
 import { useEffect,useState,useRef } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { FaLock } from "react-icons/fa6";
-import './PagesCSS/LoginForm.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"
 import { InputField } from "../Components/InputField.js"
 import { InputTooltip } from "../Components/InputTooltip.js";
-import { Link } from "react-router-dom"
 import PathConstants from "../Routes/PathConstants";
 import { login } from '../API/User.js'
+import './PagesCSS/LoginForm.css'
 //const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const USER_REGEX = /^[a-zA-Z0-9-_]{3,23}$/;
 // const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -21,6 +22,7 @@ export default function LoginForm(){
 
 
   const [user,setUser] = useState('');
+
   const[validName,setValidName] = useState(false);
   const [userFocus,setUserFocus] = useState(false);
   
@@ -30,7 +32,7 @@ export default function LoginForm(){
 
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
-
+  const navigate = useNavigate();
 
   useEffect(() =>{
     const result = USER_REGEX.test(user);
@@ -50,6 +52,16 @@ export default function LoginForm(){
     setErrMsg('')
   },[user,pwd])
 
+  function handleLogin(user){
+    if (user && user['id']){
+      localStorage.setItem('user_id',user['id'])
+      navigate("/clothes")
+    }
+    else{
+      console.log("User failed to login")
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userV = USER_REGEX.test(user);
@@ -58,19 +70,19 @@ export default function LoginForm(){
     if (!userV || !pwdV){
       setErrMsg("Invalid Entry")
     }
-
-    console.log(login(user,pwd))
+    
+    login(user,pwd,handleLogin)
     setSuccess(true);
   }
 
   return (
     <div className="wrapper">
-    <form onSubmit= {handleSubmit}action ="">
+    <form onSubmit= {handleSubmit} action ="">
       <h1> Welcome to,</h1>
       <h3> Please Login</h3>
       <InputField
               inputType = "text" 
-              inputPlaceholder=" Username"
+              inputPlaceholder=" CPF"
               onChange={(e) => setUser(e.target.value)}
               validatedAria={()=> { if (validName){return "false"}else{return "true"}}}
               describedAria="uidnote"
@@ -79,11 +91,10 @@ export default function LoginForm(){
               showTooltip = {() => {if (userFocus && !validName) {return "instructions"} else{return "offscreen"}}}
               icon = {<FaUserAlt className="icon" />}
       >
-            Animate this in future
-            <FontAwesomeIcon icon={faInfoCircle}/> Username tips:<br/>
-            &bull; 4 to 24 characters.<br/>
-            &bull; Must begin with a letter.<br/>
-            &bull; Letters, numbers, underscores, hyphens allowed.<br/>
+            <FontAwesomeIcon icon={faInfoCircle}/> CPF:<br/>
+            &bull; Type just the numbers of your cpf.<br/>
+            {/* &bull; Must begin with a letter.<br/> */}
+            {/* &bull; Letters, numbers, underscores, hyphens allowed.<br/> */}
       </InputField>
       <InputField
               inputType = "password" 
@@ -98,8 +109,8 @@ export default function LoginForm(){
       >
          <FontAwesomeIcon icon={faInfoCircle}/>Password tips:<br/>
             &bull; 8 to 24 characters.<br/>
-            &bull; Must include uppercase and lowercase letters, a number and a special character.<br />
-            &bull; Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+            &bull; Must include a number.<br />
+            {/* &bull; Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span> */}
       </InputField>
       <div className="remember-forgot">
         <label><input type="checkbox"/>Remember me</label>

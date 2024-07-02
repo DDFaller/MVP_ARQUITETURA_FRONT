@@ -4,21 +4,57 @@
   --------------------------------------------------------------------------------------
    postItem(inputDoctor,inputPatient,inputHealthcare,inputClinic,inputContact,inputSchedule)
 */
-export function login(inputCpf,inputPassword){
+const url = 'http://localhost:5000/'
+export function login(inputCpf,inputPassword,dataHandler){
   const formData = new FormData();
   formData.append('cpf', inputCpf);
   formData.append('password', inputPassword);
-  let url = 'http://127.0.0.1:5000/login';
+  const endpoint = 'login'
+  let finalUrl = url + endpoint;
 
-  var request = fetch(url, {
+  var request = fetch(finalUrl, {
     method: 'post',
     body: formData
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok){
+        return 
+      }
+      return response.json()})
     .then((data)=> {
       // Save user id
       // Change page 
       console.log(data)
+      dataHandler(data)
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      console.error(formData)
+    });
+  return request.response;
+};
+
+export function register(inputCpf,inputPassword,dataHandler){
+  const formData = new FormData();
+  formData.append('cpf', inputCpf);
+  formData.append('password', inputPassword);
+  const endpoint = 'register'
+  let finalUrl = url + endpoint;
+
+  var request = fetch(finalUrl, {
+    method: 'post',
+    body: formData
+  })
+    .then((response) => {
+      if (!response.ok){
+        return 
+      }
+      return response.json()})
+    .then((data)=> {
+      // Save user id
+      // Change page 
+      console.log(data)
+      dataHandler(data)
     })
     .catch((error) => {
       console.error('Error:', error);

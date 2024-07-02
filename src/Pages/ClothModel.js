@@ -2,15 +2,15 @@ import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useEffect } from "react"
 import { BoxGeometry, Mesh, MeshBasicMaterial } from "three";
+import { useLocation, useNavigate } from "react-router-dom";
+import './PagesCSS/ClothModel.css'
 
 
 
-
-
-const model_url = 'https://mvp-s3.s3.amazonaws.com/1/hamburguer?AWSAccessKeyId=AKIATHRQUE3TJXG7QPPQ&Expires=1719629081&Signature=acJzgEfIytQNpvuk25Ml4pekgiI%3D'
 function GLTFModel({position = [0,0,0], model_url}) {
+  console.log(model_url)
   const hamburguer = useGLTF(
-    'hamburger.glb'
+    model_url
   );
   const scaleOption = 0.2
   console.log(hamburguer)
@@ -21,8 +21,21 @@ function GLTFModel({position = [0,0,0], model_url}) {
 
 
 
-export default function ClothModel({model_url = 'model_url'}){
+export default function ClothModel(){
+
+  const location = useLocation();
+  let { modelUrl } = location.state || {};
+  
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1); // Go back to the previous page
+  };
+
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(modelUrl['data'])}`;
+
   return <>
+    <button onClick={handleBack} className="BackButtonClothes">Back</button>
+    <img src={qrCodeUrl} alt="QR Code" className="QrCode" />
     <Canvas
       className='r3f'
       camera={ {
@@ -45,8 +58,7 @@ export default function ClothModel({model_url = 'model_url'}){
     <directionalLight></directionalLight>
 
     <OrbitControls/>
-    {/* <GLTFModel model_url={model_url}/> */}
-
+    <GLTFModel model_url={modelUrl['data']}/> 
   </Canvas>
   
   </>
